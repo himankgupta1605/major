@@ -4,7 +4,7 @@ import re, smtplib, cv2
 from email.mime.text import MIMEText
 import numpy as np
 from app import db, totp
-from app.models import Aadhaar, Entitlement
+from app.models import Aadhaar, Entitlement, Usage
 from face_utils import decode_base64_image, compare_faces,is_face_visible
 from app import create_app
 
