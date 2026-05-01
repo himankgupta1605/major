@@ -1,6 +1,8 @@
 from flask import Flask, session
 from flask_sqlalchemy import SQLAlchemy
 import pyotp
+from app.models import Aadhaar
+
 
 # TOTP
 totp = pyotp.TOTP("JBSWY3DPEHPK3PXP")
@@ -14,3 +16,5 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://root:ORZJQlwukQOcReuYDEQaA
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
+with app.app_context():
+    db.create_all()
