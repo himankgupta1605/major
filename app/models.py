@@ -1,14 +1,14 @@
-from . import db
+from app import db
 
 class Aadhaar(db.Model):
     __tablename__ = "aadhaar"
+
     aadhaarNo = db.Column(db.String(12), primary_key=True)
     name = db.Column(db.String(100))
     address = db.Column(db.Text)
     mobileNo = db.Column(db.String(15))
     category = db.Column(db.String(50))
-    face_image = db.Column(db.LargeBinary)  # store raw JPG bytes
-
+    face_image = db.Column(db.LargeBinary)
   
 class GeneralCount(db.Model):
     aadhaarNo = db.Column(db.String(12),db.ForeignKey('aadhaar.aadhaarNo'),primary_key=True)
