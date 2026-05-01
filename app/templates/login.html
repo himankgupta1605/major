@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Login • Ration Portal</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+
+<style>
+body{
+  margin:0;
+  font-family:system-ui;
+  background:#000;
+  overflow:hidden;
+}
+
+/* Background */
+#particles-js{
+  position:fixed;
+  width:100%;
+  height:100%;
+  z-index:0;
+}
+
+/* Layout */
+.container{
+  position:relative;
+  z-index:10;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+/* Card */
+.card{
+  display:flex;
+  gap:20px;
+  width:900px;
+  padding:25px;
+  border-radius:16px;
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(15px);
+  color:white;
+}
+
+/* LEFT SIDE (FACE PREVIEW) */
+.left{
+  width:180px;
+  text-align:center;
+}
+
+.face-box{
+  width:150px;
+  height:150px;
+  border-radius:12px;
+  background:#111;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
+  border:1px solid #333;
+}
+
+.face-box img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* RIGHT SIDE */
+.right{
+  flex:1;
+}
+
+/* Inputs */
+input{
+  width:100%;
+  padding:12px;
+  border-radius:8px;
+  border:1px solid #444;
+  background:#111;
+  color:white;
+  margin-top:10px;
+}
+
+/* Camera */
+video{
+  width:200px;
+  border-radius:10px;
+  margin-top:10px;
+  border:1px solid #333;
+}
+
+/* Buttons */
+button{
+  width:100%;
+  padding:12px;
+  margin-top:12px;
+  border:none;
+  border-radius:8px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+#captureBtn{
+  background:#222;
+  color:white;
+}
+
+#loginBtn{
+  background:#2563eb;
+  color:white;
+}
+
+#loginBtn:disabled{
+  background:#555;
+}
+
+/* Error */
+.error{
+  background:#ff4444;
+  padding:10px;
+  border-radius:8px;
+  margin-bottom:10px;
+}
+
+/* Hidden */
+.hidden{
+  display:none;
+}
+</style>
+</head>
+
+<body>
+
+<div id="particles-js"></div>
+
+<div class="container">
+  <div class="card">
+
+    <!-- LEFT: FACE PREVIEW -->
+    <div class="left">
+      <div class="face-box">
+        <img id="preview" src="" class="hidden">
+        <span id="placeholder">No Face</span>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="right">
+
+      <h2>Login</h2>
+<div id="status" style="margin-top:10px; font-size:14px;"></div>
+      {% if error %}
+        <div class="error">{{ error }}</div>
+      {% endif %}
+
+      <form method="post">
+
+        <input type="text" id="aadhaar" name="aadhaarNo"
+               placeholder="Enter Aadhaar" maxlength="12" required>
+
+        <!-- Camera -->
+        <div id="cameraSection" class="hidden">
+          <video id="video" autoplay playsinline></video>
+          <canvas id="canvas" class="hidden"></canvas>
+          <input type="hidden" name="face_image" id="face_image">
+
+          <button type="button" id="captureBtn">Capture Face</button>
+        </div>
+
+        <button type="submit" id="loginBtn" disabled>Login</button>
+
+      </form>
+
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* ELEMENTS */
+const aadhaar = document.getElementById("aadhaar");
+const cameraSection = document.getElementById("cameraSection");
+const video = document.getElementById("video");
+const canvas = document.getElementById("canvas");
+const captureBtn = document.getElementById("captureBtn");
+const loginBtn = document.getElementById("loginBtn");
+const faceInput = document.getElementById("face_image");
+const preview = document.getElementById("preview");
+const placeholder = document.getElementById("placeholder");
+const status = document.getElementById("status");
+
+let checking = false;
+
+/* STATUS HELPER */
+function setStatus(msg, color){
+  if(!status) return;
+  status.textContent = msg;
+  status.style.color = color;
+}
+
+/* RESET UI */
+function resetUI(){
+  cameraSection.classList.add("hidden");
+  loginBtn.disabled = true;
+  faceInput.value = "";
+  preview.classList.add("hidden");
+  placeholder.style.display = "block";
+}
+
+/* Aadhaar input */
+aadhaar.addEventListener("input", () => {
+  aadhaar.value = aadhaar.value.replace(/\D/g,'').slice(0,12);
+
+  resetUI();
+
+  if(aadhaar.value.length !== 12) return;
+
+  if(checking) return;
+  checking = true;
+
+  setStatus("Checking Aadhaar...", "#aaa");
+
+  fetch(`/check_user/${aadhaar.value}`)
+    .then(res => res.json())
+    .then(data => {
+
+      checking = false;
+
+      // ❌ Invalid Aadhaar
+      if(!data.valid){
+        setStatus("Invalid Aadhaar ❌", "red");
+        return;
+      }
+
+      // 🔁 Not registered
+      if(!data.exists){
+        setStatus("Redirecting to register...", "orange");
+        setTimeout(() => {
+          window.location.href = `/register?aadhaarNo=${aadhaar.value}`;
+        }, 800);
+        return;
+      }
+
+      // ✅ Valid + Exists
+      setStatus("User found. Capture face 📸", "#22c55e");
+
+      cameraSection.classList.remove("hidden");
+
+      if(!video.srcObject){
+        navigator.mediaDevices.getUserMedia({ video:true })
+          .then(stream => video.srcObject = stream)
+          .catch(() => setStatus("Camera access denied ❌", "red"));
+      }
+    })
+    .catch(() => {
+      checking = false;
+      setStatus("Server error ❌", "red");
+    });
+});
+
+/* Face validation */
+function validate(){
+  loginBtn.disabled = !faceInput.value;
+}
+
+/* Capture */
+captureBtn.onclick = () => {
+  const ctx = canvas.getContext("2d");
+
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+
+  ctx.drawImage(video, 0, 0);
+
+  // ✅ FIRST define data
+  const data = canvas.toDataURL("image/jpeg");
+
+  setStatus("Checking face...", "#aaa");
+
+  fetch("/check_face", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({ image: data })
+  })
+  .then(res => res.json())
+  .then(result => {
+
+    if(!result.ok){
+      setStatus(result.msg || "Face not visible ❌", "red");
+      return;
+    }
+
+    // ✅ ONLY set after validation
+    faceInput.value = data;
+
+    preview.src = data;
+    preview.classList.remove("hidden");
+    placeholder.style.display = "none";
+
+    setStatus("Face captured successfully ✅", "#22c55e");
+
+    validate();
+  })
+  .catch(() => setStatus("Face check failed ❌", "red"));
+};
+</script>
+
+</body>
+</html>

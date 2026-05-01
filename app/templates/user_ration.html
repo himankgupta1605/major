@@ -1,0 +1,108 @@
+{% extends 'includes/layout.html' %}
+
+{% block body %}
+
+<div class="sidebar">
+  <a class="active" href="/">Home</a>
+  <a href="/stock">Stock</a>
+  <a href="/profile">Profile</a>
+  <a href="/getUsage">Usage</a>
+  <a href="/logout" style="color:red;">Logout</a>
+</div>
+
+<div class="content">
+  <div class="container">
+
+    <div class="card p-4 mt-5 mx-auto" style="max-width: 1000px;">
+      <div class="card-body">
+
+        <h2 class="text-center mb-4">Dashboard</h2>
+
+        <!-- USER INFO -->
+        <div class="row mb-4">
+          <div class="col-md-6">
+            <h5><b>Name:</b> {{ user.name }}</h5>
+            <h5><b>Aadhaar:</b> {{ user.aadhaarNo }}</h5>
+          </div>
+          <div class="col-md-6">
+            <h5><b>Category:</b> {{ user.category }}</h5>
+            <h5><b>Mobile:</b> {{ user.mobileNo }}</h5>
+          </div>
+        </div>
+
+        <!-- STATS -->
+        <div class="clearfix text-center">
+
+          <div class="card text-white bg-success mb-3 float-left m-3 p-3" style="max-width: 18rem;">
+            <div class="card-body">
+              <h5>Allowed</h5>
+              <h3>{{ entitlement.maxAmount if entitlement else 10 }} KG</h3>
+            </div>
+          </div>
+
+          <div class="card text-white bg-info mb-3 float-left m-3 p-3" style="max-width: 18rem;">
+            <div class="card-body">
+              <h5>Used</h5>
+              <h3>{{ total_used }} KG</h3>
+            </div>
+          </div>
+
+          <div class="card text-white bg-warning mb-3 float-left m-3 p-3" style="max-width: 18rem;">
+            <div class="card-body">
+              <h5>Remaining</h5>
+              <h3>{{ remaining }} KG</h3>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ACTIONS -->
+        <div class="row text-center mt-4">
+          <div class="col-md-4">
+            <a href="/stock" class="btn button button-3d">Get Ration</a>
+          </div>
+          <div class="col-md-4">
+            <a href="/getUsage" class="btn button button-3d">View Usage</a>
+          </div>
+          <div class="col-md-4">
+            <a href="/profile" class="btn button button-3d">Profile</a>
+          </div>
+        </div>
+
+        <!-- RECENT USAGE -->
+        <div class="mt-5">
+          <h4>Recent Transactions</h4>
+
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Rice</th>
+                <th>Wheat</th>
+                <th>Coarse</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for u in usages %}
+              <tr>
+                <td>{{ u.created_at }}</td>
+                <td>{{ u.rice }} KG</td>
+                <td>{{ u.wheat }} KG</td>
+                <td>{{ u.coarse }} KG</td>
+              </tr>
+              {% else %}
+              <tr>
+                <td colspan="4">No usage yet</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

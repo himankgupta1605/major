@@ -1,0 +1,103 @@
+{% extends 'includes/layout.html' %}
+
+{% block body %}
+
+<div class="sidebar">
+    <a href="/">Home</a>
+    <a href="/stock">Stock</a>
+    <a class="active" href="/profile">Profile</a>
+    <a href="/getUsage">Check Usage</a>
+    <a href="/logout" style="color:red;">Logout</a>
+</div>
+
+<div class="content">
+    <div class="container">
+        <div class="row">
+
+            <div class="card p-4 mt-5 mx-auto" style="max-width: 800px;">
+                <div class="card-body">
+
+                    <h2 class="text-center mb-4">Profile</h2>
+
+                    <!-- SUCCESS MESSAGE -->
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, msg in messages %}
+                                <div class="alert alert-success">{{ msg }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
+                    <form method="POST">
+
+                        <table class="table">
+
+                            <tr>
+                                <td>Aadhaar Number</td>
+                                <td>
+                                    <input class="form-control" type="text"
+                                           value="{{ user.aadhaarNo }}" disabled>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>Name</td>
+                                <td>
+                                    <input class="form-control" type="text"
+                                           name="name"
+                                           value="{{ user.name }}" required>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>Address</td>
+                                <td>
+                                    <input class="form-control" type="text"
+                                           name="address"
+                                           value="{{ user.address }}">
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>Mobile Number</td>
+                                <td>
+                                    <input class="form-control" type="text"
+                                           name="mobileNo"
+                                           value="{{ user.mobileNo }}"
+                                           maxlength="10" required>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>Category</td>
+                                <td>
+                                    <input class="form-control" type="text"
+                                           value="{{ user.category }}" disabled>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <button class="btn button button-3d" type="submit">
+                                        Update Profile
+                                    </button>
+
+                                    <a href="/" class="btn button button-3d">
+                                        Back
+                                    </a>
+                                </td>
+                            </tr>
+
+                        </table>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
