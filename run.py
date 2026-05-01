@@ -9,17 +9,6 @@ from face_utils import decode_base64_image, compare_faces,is_face_visible
 from app import create_app
 
 app = create_app()
-# ---------------- Usage Model ----------------
-class Usage(db.Model):
-    __tablename__ = "ration_usage"
-
-    id = db.Column(db.Integer, primary_key=True)
-    aadhaarNo = db.Column(db.String(12), db.ForeignKey("aadhaar.aadhaarNo"))
-    rice = db.Column(db.Integer, default=0)
-    wheat = db.Column(db.Integer, default=0)
-    coarse = db.Column(db.Integer, default=0)
-    created_at = db.Column(db.DateTime, server_default=db.func.now())
-
 # ---------------- Config ----------------
 PHOTO_DIR = Path("data/faces")
 PHOTO_DIR.mkdir(parents=True, exist_ok=True)
