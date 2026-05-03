@@ -1,108 +1,252 @@
 {% extends 'includes/layout.html' %}
-
 {% block body %}
 
-<div class="sidebar">
-  <a class="active" href="/">Home</a>
-  <a href="/stock">Stock</a>
-  <a href="/profile">Profile</a>
-  <a href="/getUsage">Usage</a>
-  <a href="/logout" style="color:red;">Logout</a>
-</div>
+<style>
+body{
+  background:#021c14;
+  color:white;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+}
 
-<div class="content">
-  <div class="container">
+/* LAYOUT */
+.dashboard{
+  display:flex;
+}
 
-    <div class="card p-4 mt-5 mx-auto" style="max-width: 1000px;">
-      <div class="card-body">
+/* SIDEBAR */
+.sidebar{
+  width:220px;
+  height:100vh;
+  position:fixed;
+  background:rgba(0,0,0,0.6);
+  backdrop-filter:blur(12px);
+  padding:20px;
+}
 
-        <h2 class="text-center mb-4">Dashboard</h2>
+.sidebar a{
+  display:block;
+  padding:12px;
+  margin-bottom:10px;
+  border-radius:10px;
+  text-decoration:none;
+  color:#ccc;
+  transition:0.3s;
+}
 
-        <!-- USER INFO -->
-        <div class="row mb-4">
-          <div class="col-md-6">
-            <h5><b>Name:</b> {{ user.name }}</h5>
-            <h5><b>Aadhaar:</b> {{ user.aadhaarNo }}</h5>
-          </div>
-          <div class="col-md-6">
-            <h5><b>Category:</b> {{ user.category }}</h5>
-            <h5><b>Mobile:</b> {{ user.mobileNo }}</h5>
-          </div>
-        </div>
+.sidebar a:hover,
+.sidebar .active{
+  background:#22c55e;
+  color:white;
+}
 
-        <!-- STATS -->
-        <div class="clearfix text-center">
+/* CONTENT */
+.content{
+  margin-left:240px;
+  padding:30px;
+  width:100%;
+}
 
-          <div class="card text-white bg-success mb-3 float-left m-3 p-3" style="max-width: 18rem;">
-            <div class="card-body">
-              <h5>Allowed</h5>
-              <h3>{{ entitlement.maxAmount if entitlement else 10 }} KG</h3>
-            </div>
-          </div>
+/* CARD */
+.card{
+  background:rgba(255,255,255,0.05);
+  border-radius:16px;
+  padding:20px;
+  margin-bottom:20px;
+  backdrop-filter:blur(10px);
+  animation:fadeUp 0.6s ease;
+}
 
-          <div class="card text-white bg-info mb-3 float-left m-3 p-3" style="max-width: 18rem;">
-            <div class="card-body">
-              <h5>Used</h5>
-              <h3>{{ total_used }} KG</h3>
-            </div>
-          </div>
+@keyframes fadeUp{
+  from{opacity:0; transform:translateY(20px);}
+  to{opacity:1; transform:translateY(0);}
+}
 
-          <div class="card text-white bg-warning mb-3 float-left m-3 p-3" style="max-width: 18rem;">
-            <div class="card-body">
-              <h5>Remaining</h5>
-              <h3>{{ remaining }} KG</h3>
-            </div>
-          </div>
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:20px;
+}
 
-        </div>
+/* STAT */
+.stat{
+  text-align:center;
+}
 
-        <!-- ACTIONS -->
-        <div class="row text-center mt-4">
-          <div class="col-md-4">
-            <a href="/stock" class="btn button button-3d">Get Ration</a>
-          </div>
-          <div class="col-md-4">
-            <a href="/getUsage" class="btn button button-3d">View Usage</a>
-          </div>
-          <div class="col-md-4">
-            <a href="/profile" class="btn button button-3d">Profile</a>
-          </div>
-        </div>
+.stat h3{
+  font-size:28px;
+}
 
-        <!-- RECENT USAGE -->
-        <div class="mt-5">
-          <h4>Recent Transactions</h4>
+/* BUTTONS */
+.actions{
+  display:flex;
+  gap:15px;
+  margin-top:20px;
+}
 
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Rice</th>
-                <th>Wheat</th>
-                <th>Coarse</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for u in usages %}
-              <tr>
-                <td>{{ u.created_at }}</td>
-                <td>{{ u.rice }} KG</td>
-                <td>{{ u.wheat }} KG</td>
-                <td>{{ u.coarse }} KG</td>
-              </tr>
-              {% else %}
-              <tr>
-                <td colspan="4">No usage yet</td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
+.actions a{
+  flex:1;
+  text-align:center;
+  padding:12px;
+  border-radius:10px;
+  background:linear-gradient(135deg,#22c55e,#16a34a);
+  text-decoration:none;
+  color:white;
+  transition:0.3s;
+}
 
+.actions a:hover{
+  transform:translateY(-3px);
+}
+
+/* TABLE */
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:10px;
+}
+
+th,td{
+  padding:10px;
+  border-bottom:1px solid #333;
+  text-align:center;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+  .sidebar{display:none;}
+  .content{margin-left:0;}
+}
+</style>
+
+<div class="dashboard">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <a class="active" href="/">Dashboard</a>
+    <a href="/stock">Get Ration</a>
+    <a href="/profile">Profile</a>
+    <a href="/getUsage">Usage</a>
+    <a href="/logout" style="color:red;">Logout</a>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- USER INFO -->
+    <div class="card">
+      <h2>Welcome, {{ user.name }}</h2>
+      <p>
+        Aadhaar: {{ user.aadhaarNo }} |
+        Category: {{ user.category }} |
+        Mobile: {{ user.mobileNo }}
+      </p>
+    </div>
+
+    <!-- STATS -->
+    <div class="grid">
+
+      <div class="card stat">
+        <h5>Allowed</h5>
+        <h3>{{ entitlement.maxAmount if entitlement else 10 }} KG</h3>
       </div>
+
+      <div class="card stat">
+        <h5>Used</h5>
+        <h3>{{ total_used }} KG</h3>
+      </div>
+
+      <div class="card stat">
+        <h5>Remaining</h5>
+        <h3>{{ remaining }} KG</h3>
+      </div>
+
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="actions">
+      <a href="/stock">Get Ration</a>
+      <a href="/getUsage">Usage</a>
+      <a href="/profile">Profile</a>
+    </div>
+
+    <!-- CHARTS -->
+    <div class="grid">
+
+      <div class="card">
+        <h4>Consumption Overview</h4>
+        <canvas id="barChart"></canvas>
+      </div>
+
+      <div class="card">
+        <h4>Distribution Split</h4>
+        <canvas id="pieChart"></canvas>
+      </div>
+
+    </div>
+
+    <!-- TABLE -->
+    <div class="card">
+      <h4>Recent Transactions</h4>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Rice</th>
+            <th>Wheat</th>
+            <th>Coarse</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for u in usages %}
+          <tr>
+            <td>{{ u.created_at }}</td>
+            <td>{{ u.rice }} KG</td>
+            <td>{{ u.wheat }} KG</td>
+            <td>{{ u.coarse }} KG</td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="4">No usage yet</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
 
   </div>
 </div>
+
+<!-- CHART LIB -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+/* SAFE DATA FROM BACKEND */
+const chartData = {{ [total_rice, total_wheat, total_coarse] | tojson }};
+
+/* BAR CHART */
+new Chart(document.getElementById("barChart"), {
+  type: "bar",
+  data: {
+    labels: ["Rice","Wheat","Coarse"],
+    datasets: [{
+      label: "Usage (KG)",
+      data: chartData
+    }]
+  }
+});
+
+/* PIE CHART */
+new Chart(document.getElementById("pieChart"), {
+  type: "pie",
+  data: {
+    labels: ["Rice","Wheat","Coarse"],
+    datasets: [{
+      data: chartData
+    }]
+  }
+});
+</script>
 
 {% endblock %}

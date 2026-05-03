@@ -5,225 +5,232 @@
 <title>Register • Smart Ration</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
-
 <style>
-:root{
-  --bg:#020617;
-  --card:rgba(17,24,39,0.75);
-  --border:#1f2937;
-  --text:#e5e7eb;
-  --muted:#9ca3af;
-  --accent:#22c55e;
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
 }
 
 body{
-  margin:0;
-  font-family:system-ui;
-  background:#000;
-  color:var(--text);
-  overflow:hidden;
+  background: linear-gradient(135deg, #052e16, #064e3b, #022c22);
+  background-size:300% 300%;
+  animation:gradientMove 10s ease infinite;
+  color:white;
 }
 
-/* Background */
-#particles-js{
+/* animated gradient */
+@keyframes gradientMove{
+  0%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0% 50%;}
+}
+
+/* glow */
+body::before{
+  content:"";
   position:fixed;
-  width:100%;
-  height:100%;
-  z-index:0;
+  width:500px;
+  height:500px;
+  background:radial-gradient(circle, rgba(34,197,94,0.25), transparent 70%);
+  top:-100px;
+  left:-100px;
+  animation:floatGlow 6s ease-in-out infinite;
 }
 
-/* Layout */
+@keyframes floatGlow{
+  0%,100%{transform:translate(0,0);}
+  50%{transform:translate(80px,60px);}
+}
+
+/* layout */
 .container{
-  position:relative;
-  z-index:10;
-  height:100vh;
+  min-height:100vh;
   display:flex;
   justify-content:center;
   align-items:center;
+  padding:20px;
 }
 
-/* Card */
+/* card */
 .card{
-  display:flex;
-  gap:30px;
-  width:900px;
+  width:100%;
+  max-width:460px;
   padding:28px;
   border-radius:18px;
-  background:var(--card);
+  background:rgba(255,255,255,0.06);
   backdrop-filter:blur(20px);
-  border:1px solid var(--border);
+  border:1px solid rgba(255,255,255,0.08);
+  box-shadow:0 10px 40px rgba(0,0,0,0.6);
+  animation:fadeUp 0.7s ease;
 }
 
-/* LEFT SIDE - FACE */
-.left{
-  width:260px;
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(30px);}
+  to{opacity:1;transform:translateY(0);}
 }
 
+/* title */
+h2{
+  margin-bottom:6px;
+}
+
+.subtitle{
+  font-size:14px;
+  color:#aaa;
+  margin-bottom:18px;
+}
+
+/* aadhaar box */
+.aadhaar-box{
+  background:#020617;
+  padding:12px;
+  border-radius:10px;
+  border:1px solid #1f2937;
+  margin-bottom:16px;
+}
+
+/* face */
 .face-box{
   width:100%;
-  height:80px;
-  border-radius:14px;
+  height:160px;
+  border-radius:12px;
   background:#0b1224;
-  border:1px solid var(--border);
+  border:1px solid #1f2937;
   display:flex;
-  justify-content:center;
   align-items:center;
+  justify-content:center;
   overflow:hidden;
+  margin-bottom:12px;
 }
 
-.face-box img{
+.face-box.success{
+  border:1px solid #22c55e;
+  animation:pulse 0.6s ease;
+}
+
+@keyframes pulse{
+  0%{transform:scale(1);}
+  50%{transform:scale(1.05);}
+  100%{transform:scale(1);}
+}
+
+/* inputs */
+input,textarea,select{
   width:100%;
-  height:100%;
-  object-fit:cover;
-}
-
-.face-placeholder{
-  color:#555;
-  font-size:14px;
-}
-
-/* RIGHT SIDE - FORM */
-.right{
-  flex:1;
-}
-
-h2{
-  margin-bottom:15px;
-}
-
-/* Inputs */
-input, textarea, select{
-  width:100%;
-  padding:12px;
+  padding:14px;
   border-radius:10px;
-  border:1px solid var(--border);
-  margin-top:8px;
-  background:#020617;
-  color:#fff;
+  border:1px solid #222;
+  background:#0d0d0d;
+  color:white;
+  margin-bottom:12px;
 }
 
-textarea{
-  resize:none;
+input:focus,textarea:focus{
+  outline:none;
+  border-color:#22c55e;
+  box-shadow:0 0 0 2px rgba(34,197,94,0.3);
 }
 
-/* Buttons */
+/* video */
+video{
+  width:100%;
+  border-radius:12px;
+  margin-bottom:10px;
+}
+
+/* buttons */
 button{
   width:100%;
-  padding:12px;
-  margin-top:12px;
-  border:none;
+  padding:14px;
   border-radius:10px;
-  font-weight:bold;
+  border:none;
+  font-weight:600;
   cursor:pointer;
+  transition:0.2s;
+}
+
+button:hover{
+  transform:translateY(-2px);
 }
 
 .capture{
-  background:#111;
+  background:#064e3b;
   color:white;
 }
 
 .primary{
-  background:#2563eb;
+  background:linear-gradient(135deg,#22c55e,#16a34a);
   color:white;
 }
 
 .primary:disabled{
-  background:#555;
+  background:#444;
+  cursor:not-allowed;
 }
 
-/* Status */
+/* status */
 .status{
-  text-align:center;
-  margin-top:10px;
-  font-size:14px;
-  color:var(--muted);
+  font-size:13px;
+  margin-bottom:10px;
+}
+
+/* mobile */
+@media(max-width:480px){
+  .card{
+    padding:20px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<div id="particles-js"></div>
-
 <div class="container">
 <div class="card">
 
-  <!-- LEFT -->
-  <div class="left">
-    <div class="face-box">
-      <img id="preview" style="display:none;">
-      <div id="placeholder" class="face-placeholder">No Face Captured</div>
-    </div>
-    <div class="status" id="status">Waiting for capture</div>
-  </div>
+<h2>Create Account</h2>
+<p class="subtitle">Complete your profile and verify face</p>
 
-  <!-- RIGHT -->
-  <div class="right">
-    <h2>Create Account</h2>
-
-    <form method="post">
-
-     <div style="margin-bottom:10px;font-size:14px;color:#9ca3af;">
-  Aadhaar Verified
+<div class="aadhaar-box">
+  Aadhaar Verified: <strong>{{ aadhaarNo }}</strong>
 </div>
-<div style="background:#020617;padding:12px;border-radius:10px;border:1px solid #1f2937;">
-  <strong>{{ aadhaarNo }}</strong>
+
+<div class="face-box">
+  <img id="preview" style="display:none;">
+  <span id="placeholder">Face preview</span>
 </div>
+
+<div id="status" class="status"></div>
+
+<form method="post">
 
 <input type="hidden" name="aadhaarNo" value="{{ aadhaarNo }}">
-       
-      <input type="text" id="name" name="name" placeholder="Full Name" required>
 
-      <input type="text" id="mobile" name="mobileNo" placeholder="Mobile (10 digits)" maxlength="10" required>
+<input type="text" id="name" name="name" placeholder="Full Name" required>
+<input type="text" id="mobile" name="mobileNo" placeholder="Mobile (10 digits)" maxlength="10" required>
+<textarea name="address" placeholder="Address"></textarea>
 
-      <textarea name="address" placeholder="Address"></textarea>
+<select name="category">
+<option value="APL">APL</option>
+<option value="BPL">BPL</option>
+<option value="AAY">AAY</option>
+</select>
 
-      <select name="category">
-        <option value="APL">APL</option>
-        <option value="BPL">BPL</option>
-        <option value="AAY">AAY</option>
-      </select>
+<video id="video" autoplay playsinline></video>
+<canvas id="canvas" style="display:none;"></canvas>
+<input type="hidden" name="face_image" id="face_image">
 
-      <!-- Camera -->
-      <video id="video" autoplay playsinline style="margin-top:10px; border-radius:10px;"></video>
+<button type="button" id="captureBtn" class="capture">Capture Face</button>
+<button id="submitBtn" class="primary" disabled>Create Account</button>
 
-      <canvas id="canvas" style="display:none;"></canvas>
-      <input type="hidden" name="face_image" id="face_image">
-
-      <button type="button" id="captureBtn" class="capture">Capture Face</button>
-
-      <button id="submitBtn" class="primary" disabled>Create Account</button>
-
-    </form>
-  </div>
+</form>
 
 </div>
 </div>
 
 <script>
-/* PARTICLES */
-window.onload = function(){
-  particlesJS("particles-js", {
-    particles: {
-      number: { value: 80 },
-      color: { value: "#ffffff" },
-      size: { value: 2, random:true },
-      move: { enable:true, speed:1 },
-      line_linked: { enable:false }
-    },
-    interactivity: {
-      events: {
-        onhover: { enable:true, mode:"repulse" }
-      },
-      modes: {
-        repulse: { distance:120 }
-      }
-    }
-  });
-};
-
-/* ELEMENTS */
 const video = document.getElementById("video");
 const canvas = document.getElementById("canvas");
 const captureBtn = document.getElementById("captureBtn");
@@ -232,17 +239,15 @@ const faceInput = document.getElementById("face_image");
 const preview = document.getElementById("preview");
 const placeholder = document.getElementById("placeholder");
 const status = document.getElementById("status");
-
-const aadhaar = document.getElementById("aadhaar");
 const name = document.getElementById("name");
 const mobile = document.getElementById("mobile");
 
-/* Camera */
-navigator.mediaDevices.getUserMedia({ video: true })
-  .then(stream => video.srcObject = stream)
-  .catch(() => status.textContent = "Camera access denied");
+/* camera */
+navigator.mediaDevices.getUserMedia({video:true})
+.then(stream => video.srcObject = stream)
+.catch(()=> status.textContent = "Camera denied");
 
-/* Validate */
+/* validate */
 function validate(){
   const valid =
     name.value.trim().length > 1 &&
@@ -250,58 +255,52 @@ function validate(){
     faceInput.value !== "";
 
   submitBtn.disabled = !valid;
-
-  if(valid){
-    submitBtn.classList.remove("disabled");
-  } else {
-    submitBtn.classList.add("disabled");
-  }
 }
 
-/* Inputs */
-[name, mobile].forEach(el => {
-  el.addEventListener("input", () => {
-    validate();
-  });
+/* inputs */
+[name,mobile].forEach(el=>{
+  el.addEventListener("input",validate);
 });
 
-/* Capture */
+/* capture */
 captureBtn.onclick = () => {
   const ctx = canvas.getContext("2d");
-
   canvas.width = video.videoWidth;
   canvas.height = video.videoHeight;
 
-  ctx.drawImage(video, 0, 0);
-
+  ctx.drawImage(video,0,0);
   const data = canvas.toDataURL("image/jpeg");
 
-  // 🔥 Send to backend for validation
-  fetch("/check_face", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ image: data })
-  })
-  .then(res => res.json())
-  .then(result => {
+  status.textContent = "Checking face...";
 
+  fetch("/check_face",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({image:data})
+  })
+  .then(res=>res.json())
+  .then(result=>{
     if(!result.ok){
       status.textContent = result.msg;
       status.style.color = "red";
       return;
     }
 
-    // ✅ Face OK
     faceInput.value = data;
-
     preview.src = data;
     preview.style.display = "block";
     placeholder.style.display = "none";
 
-    status.textContent = "Face captured successfully ✅";
+    const box = document.querySelector(".face-box");
+    box.classList.add("success");
+
+    setTimeout(()=> box.classList.remove("success"),600);
+
+    status.textContent = "Face verified";
     status.style.color = "#22c55e";
+
+    captureBtn.textContent = "Captured ✓";
+    captureBtn.disabled = true;
 
     validate();
   });

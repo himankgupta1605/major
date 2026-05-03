@@ -8,11 +8,17 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
 
 <style>
-body{
+
+  *{
+  box-sizing:border-box;
   margin:0;
-  font-family:system-ui;
-  background:#000;
-  overflow:hidden;
+  padding:0;
+  font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+body{
+  background:#2cc517;
+  color:white;
 }
 
 /* Background */
@@ -27,40 +33,49 @@ body{
 .container{
   position:relative;
   z-index:10;
-  height:100vh;
+  min-height:100vh;
   display:flex;
   justify-content:center;
   align-items:center;
+  padding:20px;
 }
 
 /* Card */
 .card{
-  display:flex;
-  gap:20px;
-  width:900px;
-  padding:25px;
-  border-radius:16px;
-  background:rgba(255,255,255,0.08);
-  backdrop-filter:blur(15px);
-  color:white;
+  width:100%;
+  max-width:420px;
+  padding:28px;
+  border-radius:18px;
+  background:rgba(255,255,255,0.06);
+  backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,0.08);
+  box-shadow:0 10px 40px rgba(0,0,0,0.6);
 }
 
-/* LEFT SIDE (FACE PREVIEW) */
-.left{
-  width:180px;
-  text-align:center;
+/* Title */
+h2{
+  font-size:24px;
+  margin-bottom:8px;
 }
 
+.subtitle{
+  font-size:14px;
+  color:#aaa;
+  margin-bottom:20px;
+}
+
+/* Face Preview */
 .face-box{
-  width:150px;
-  height:150px;
-  border-radius:12px;
-  background:#111;
+  width:100%;
+  height:180px;
+  border-radius:14px;
+  background:#0d0d0d;
+  border:1px solid #222;
   display:flex;
   justify-content:center;
   align-items:center;
   overflow:hidden;
-  border:1px solid #333;
+  margin-bottom:16px;
 }
 
 .face-box img{
@@ -69,66 +84,199 @@ body{
   object-fit:cover;
 }
 
-/* RIGHT SIDE */
-.right{
-  flex:1;
+.placeholder{
+  color:#666;
+  font-size:14px;
 }
 
 /* Inputs */
-input{
-  width:100%;
-  padding:12px;
-  border-radius:8px;
-  border:1px solid #444;
-  background:#111;
-  color:white;
-  margin-top:10px;
+.input-group{
+  margin-bottom:14px;
 }
 
-/* Camera */
-video{
-  width:200px;
+input{
+  width:100%;
+  padding:14px;
   border-radius:10px;
-  margin-top:10px;
-  border:1px solid #333;
+  border:1px solid #222;
+  background:#0d0d0d;
+  color:white;
+  font-size:15px;
+}
+
+input:focus{
+  outline:none;
+  border-color:#2563eb;
+}
+
+/* Video */
+video{
+  width:100%;
+  border-radius:12px;
+  margin-top:12px;
+  border:1px solid #222;
 }
 
 /* Buttons */
 button{
   width:100%;
-  padding:12px;
-  margin-top:12px;
+  padding:14px;
+  border-radius:10px;
   border:none;
-  border-radius:8px;
-  font-weight:bold;
+  font-weight:600;
   cursor:pointer;
+  transition:0.2s;
 }
 
+/* Capture */
 #captureBtn{
-  background:#222;
+  margin-top:12px;
+  background:#1f1f1f;
   color:white;
 }
 
+#captureBtn:hover{
+  background:#2a2a2a;
+}
+
+/* Login */
 #loginBtn{
+  margin-top:14px;
   background:#2563eb;
   color:white;
 }
 
+#loginBtn:hover{
+  background:#1d4ed8;
+}
+
 #loginBtn:disabled{
-  background:#555;
+  background:#444;
+  cursor:not-allowed;
+}
+
+/* Status */
+#status{
+  font-size:13px;
+  margin-bottom:12px;
 }
 
 /* Error */
 .error{
-  background:#ff4444;
+  background:#ff4d4d;
   padding:10px;
   border-radius:8px;
-  margin-bottom:10px;
+  margin-bottom:12px;
 }
 
 /* Hidden */
 .hidden{
   display:none;
+}
+
+/* Mobile polish */
+@media (max-width:480px){
+  .card{
+    padding:20px;
+  }
+
+  h2{
+    font-size:20px;
+  }
+}
+
+body{
+  background: linear-gradient(135deg, #052e16, #064e3b, #022c22);
+  background-size: 300% 300%;
+  animation: gradientMove 10s ease infinite;
+  color:white;
+}
+
+/* animated gradient */
+@keyframes gradientMove {
+  0%{ background-position: 0% 50%; }
+  50%{ background-position: 100% 50%; }
+  100%{ background-position: 0% 50%; }
+}
+
+/* glowing radial overlay */
+body::before{
+  content:"";
+  position:fixed;
+  width:600px;
+  height:600px;
+  background:radial-gradient(circle, rgba(34,197,94,0.25), transparent 70%);
+  top:-150px;
+  left:-150px;
+  animation:floatGlow 6s ease-in-out infinite;
+  z-index:0;
+}
+
+@keyframes floatGlow{
+  0%,100%{ transform:translate(0,0); }
+  50%{ transform:translate(80px,60px); }
+}
+
+/* CARD ANIMATION */
+.card{
+  animation:fadeUp 0.8s ease;
+}
+
+@keyframes fadeUp{
+  from{
+    opacity:0;
+    transform:translateY(30px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+/* INPUT FOCUS GLOW */
+input:focus{
+  outline:none;
+  border-color:#22c55e;
+  box-shadow:0 0 0 2px rgba(34,197,94,0.3);
+}
+
+/* BUTTON HOVER */
+button{
+  transition:all 0.2s ease;
+}
+
+button:hover{
+  transform:translateY(-2px);
+}
+
+/* LOGIN BUTTON GRADIENT */
+#loginBtn{
+  background:linear-gradient(135deg,#22c55e,#16a34a);
+}
+
+#loginBtn:hover{
+  background:linear-gradient(135deg,#16a34a,#15803d);
+}
+
+/* CAPTURE BUTTON */
+#captureBtn{
+  background:#064e3b;
+}
+
+#captureBtn:hover{
+  background:#065f46;
+}
+
+/* FACE SUCCESS ANIMATION */
+.face-box.success{
+  animation:successPulse 0.6s ease;
+  border:1px solid #22c55e;
+}
+
+@keyframes successPulse{
+  0%{ transform:scale(1); }
+  50%{ transform:scale(1.05); }
+  100%{ transform:scale(1); }
 }
 </style>
 </head>
@@ -140,48 +288,46 @@ button{
 <div class="container">
   <div class="card">
 
-    <!-- LEFT: FACE PREVIEW -->
-    <div class="left">
-      <div class="face-box">
-        <img id="preview" src="" class="hidden">
-        <span id="placeholder">No Face</span>
-      </div>
+    <h2>Secure Login</h2>
+    <p class="subtitle">Verify your identity using Aadhaar + Face</p>
+
+    <div id="status"></div>
+
+    {% if error %}
+      <div class="error">{{ error }}</div>
+    {% endif %}
+
+    <!-- FACE PREVIEW -->
+    <div class="face-box">
+      <img id="preview" class="hidden">
+      <span id="placeholder" class="placeholder">Face preview will appear here</span>
     </div>
 
-    <!-- RIGHT -->
-    <div class="right">
+    <form method="post">
 
-      <h2>Login</h2>
-<div id="status" style="margin-top:10px; font-size:14px;"></div>
-      {% if error %}
-        <div class="error">{{ error }}</div>
-      {% endif %}
-
-      <form method="post">
-
+      <div class="input-group">
         <input type="text" id="aadhaar" name="aadhaarNo"
-               placeholder="Enter Aadhaar" maxlength="12" required>
+          placeholder="Enter Aadhaar Number"
+          maxlength="12" required>
+      </div>
 
-        <!-- Camera -->
-        <div id="cameraSection" class="hidden">
-          <video id="video" autoplay playsinline></video>
-          <canvas id="canvas" class="hidden"></canvas>
-          <input type="hidden" name="face_image" id="face_image">
+      <!-- Camera -->
+      <div id="cameraSection" class="hidden">
+        <video id="video" autoplay playsinline></video>
+        <canvas id="canvas" class="hidden"></canvas>
+        <input type="hidden" name="face_image" id="face_image">
 
-          <button type="button" id="captureBtn">Capture Face</button>
-        </div>
+        <button type="button" id="captureBtn">Capture Face</button>
+      </div>
 
-        <button type="submit" id="loginBtn" disabled>Login</button>
+      <button type="submit" id="loginBtn" disabled>Login</button>
 
-      </form>
-
-    </div>
+    </form>
 
   </div>
 </div>
 
 <script>
-/* ELEMENTS */
 const aadhaar = document.getElementById("aadhaar");
 const cameraSection = document.getElementById("cameraSection");
 const video = document.getElementById("video");
@@ -195,14 +341,11 @@ const status = document.getElementById("status");
 
 let checking = false;
 
-/* STATUS HELPER */
 function setStatus(msg, color){
-  if(!status) return;
   status.textContent = msg;
   status.style.color = color;
 }
 
-/* RESET UI */
 function resetUI(){
   cameraSection.classList.add("hidden");
   loginBtn.disabled = true;
@@ -211,17 +354,14 @@ function resetUI(){
   placeholder.style.display = "block";
 }
 
-/* Aadhaar input */
 aadhaar.addEventListener("input", () => {
   aadhaar.value = aadhaar.value.replace(/\D/g,'').slice(0,12);
-
   resetUI();
 
   if(aadhaar.value.length !== 12) return;
-
   if(checking) return;
-  checking = true;
 
+  checking = true;
   setStatus("Checking Aadhaar...", "#aaa");
 
   fetch(`/check_user/${aadhaar.value}`)
@@ -230,44 +370,34 @@ aadhaar.addEventListener("input", () => {
 
       checking = false;
 
-      // ❌ Invalid Aadhaar
       if(!data.valid){
         setStatus("Invalid Aadhaar ❌", "red");
         return;
       }
 
-      // 🔁 Not registered
       if(!data.exists){
         setStatus("Redirecting to register...", "orange");
-        setTimeout(() => {
+        setTimeout(()=>{
           window.location.href = `/register?aadhaarNo=${aadhaar.value}`;
-        }, 800);
+        },800);
         return;
       }
 
-      // ✅ Valid + Exists
-      setStatus("User found. Capture face 📸", "#22c55e");
-
+      setStatus("User found. Capture face", "#22c55e");
       cameraSection.classList.remove("hidden");
 
       if(!video.srcObject){
-        navigator.mediaDevices.getUserMedia({ video:true })
+        navigator.mediaDevices.getUserMedia({video:true})
           .then(stream => video.srcObject = stream)
-          .catch(() => setStatus("Camera access denied ❌", "red"));
+          .catch(()=> setStatus("Camera denied ❌", "red"));
       }
     })
-    .catch(() => {
+    .catch(()=>{
       checking = false;
       setStatus("Server error ❌", "red");
     });
 });
 
-/* Face validation */
-function validate(){
-  loginBtn.disabled = !faceInput.value;
-}
-
-/* Capture */
 captureBtn.onclick = () => {
   const ctx = canvas.getContext("2d");
 
@@ -275,8 +405,6 @@ captureBtn.onclick = () => {
   canvas.height = video.videoHeight;
 
   ctx.drawImage(video, 0, 0);
-
-  // ✅ FIRST define data
   const data = canvas.toDataURL("image/jpeg");
 
   setStatus("Checking face...", "#aaa");
@@ -289,24 +417,33 @@ captureBtn.onclick = () => {
   .then(res => res.json())
   .then(result => {
 
-    if(!result.ok){
+    if (!result.ok) {
       setStatus(result.msg || "Face not visible ❌", "red");
       return;
     }
 
-    // ✅ ONLY set after validation
+    // ✅ Update UI
     faceInput.value = data;
-
     preview.src = data;
     preview.classList.remove("hidden");
     placeholder.style.display = "none";
 
-    setStatus("Face captured successfully ✅", "#22c55e");
+    // ✅ Safer element reference
+    const faceBox = document.querySelector(".face-box");
+    if (faceBox) {
+      faceBox.classList.add("success");
 
-    validate();
+      setTimeout(() => {
+        faceBox.classList.remove("success");
+      }, 600);
+    }
+
+    setStatus("Face verified ✅", "#22c55e");
+    loginBtn.disabled = false;
   })
   .catch(() => setStatus("Face check failed ❌", "red"));
 };
+
 </script>
 
 </body>

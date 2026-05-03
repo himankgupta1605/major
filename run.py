@@ -263,27 +263,31 @@ def register():
 def index():
     cur_id = session.get("currentUser")
 
+    # 🔒 If not logged in → show homepage
     if not cur_id:
-        return redirect(url_for("login"))
+        return render_template("home.html")
 
+    # 🔍 Get user
     user = db.session.get(Aadhaar, cur_id)
 
     if not user:
         return render_template("not_found.html"), 404
 
+    # 📊 Get entitlement
     entitlement = Entitlement.query.filter_by(category=user.category).first()
 
-    # ✅ Get all usage
+    # 📦 Get all usage
     usages = Usage.query.filter_by(aadhaarNo=cur_id).all()
 
-    # ✅ Calculate totals
-    total_rice = sum(u.rice for u in usages)
-    total_wheat = sum(u.wheat for u in usages)
-    total_coarse = sum(u.coarse for u in usages)
+    # ✅ SAFE totals (handles None values)
+    total_rice = sum((u.rice or 0) for u in usages)
+    total_wheat = sum((u.wheat or 0) for u in usages)
+    total_coarse = sum((u.coarse or 0) for u in usages)
 
     total_used = total_rice + total_wheat + total_coarse
+
     max_allowed = entitlement.maxAmount if entitlement else 10
-    remaining = max_allowed - total_used
+    remaining = max(max_allowed - total_used, 0)  # ❗ prevent negative
 
     return render_template(
         "user_ration.html",
@@ -291,7 +295,12 @@ def index():
         entitlement=entitlement,
         total_used=total_used,
         remaining=remaining,
-        usages=usages[-5:]  # last 5 records
+        usages=usages[-5:],  # last 5 records
+
+        # 🔥 REQUIRED FOR CHARTS
+        total_rice=total_rice,
+        total_wheat=total_wheat,
+        total_coarse=total_coarse
     )
 
 @app.route("/sendOtp")

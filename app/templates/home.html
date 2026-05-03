@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Ration System</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+}
+
+body{
+  background: linear-gradient(135deg,#052e16,#064e3b,#022c22);
+  background-size:300% 300%;
+  animation:gradientMove 10s ease infinite;
+  color:white;
+  overflow-x:hidden;
+}
+
+@keyframes gradientMove{
+  0%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0% 50%;}
+}
+
+/* FLOATING GLOW */
+.glow{
+  position:fixed;
+  width:400px;
+  height:400px;
+  background:radial-gradient(circle, rgba(34,197,94,0.3), transparent);
+  top:-100px;
+  left:-100px;
+  animation:float 6s ease-in-out infinite;
+}
+
+@keyframes float{
+  0%,100%{transform:translate(0,0);}
+  50%{transform:translate(80px,60px);}
+}
+
+/* NAV */
+.nav{
+  display:flex;
+  justify-content:space-between;
+  padding:20px 40px;
+  backdrop-filter:blur(10px);
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.logo img{
+  width:40px;
+}
+
+.nav a{
+  color:white;
+  margin-left:20px;
+  text-decoration:none;
+  font-size:14px;
+}
+
+/* HERO */
+.hero{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:60px 40px;
+  flex-wrap:wrap;
+}
+
+.hero-text{
+  max-width:500px;
+  animation:fadeUp 1s ease;
+}
+
+.hero-text h1{
+  font-size:40px;
+}
+
+.hero-text p{
+  margin-top:10px;
+  color:#ccc;
+}
+
+.cta{
+  margin-top:20px;
+  padding:14px 26px;
+  border:none;
+  border-radius:10px;
+  background:linear-gradient(135deg,#22c55e,#16a34a);
+  color:white;
+  cursor:pointer;
+}
+
+/* HERO IMAGE */
+.hero img{
+  width:350px;
+  animation:floatImage 4s ease-in-out infinite;
+}
+
+@keyframes floatImage{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-20px);}
+}
+
+/* SECTION */
+.section{
+  padding:80px 40px;
+  text-align:center;
+}
+
+.features{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:20px;
+}
+
+/* FEATURE CARD */
+.card{
+  background:rgba(255,255,255,0.05);
+  padding:20px;
+  border-radius:14px;
+  backdrop-filter:blur(10px);
+  transition:0.3s;
+  animation:fadeUp 0.8s ease;
+}
+
+.card:hover{
+  transform:translateY(-8px) scale(1.02);
+}
+
+/* ABOUT */
+.about{
+  display:flex;
+  align-items:center;
+  gap:40px;
+  flex-wrap:wrap;
+}
+
+.about img{
+  width:250px;
+}
+
+.about-text{
+  max-width:500px;
+  text-align:left;
+  color:#ccc;
+}
+
+/* CONTACT */
+.contact input, .contact textarea{
+  width:100%;
+  padding:12px;
+  margin:10px 0;
+  border-radius:8px;
+  border:none;
+}
+
+/* FOOTER */
+.footer{
+  text-align:center;
+  padding:20px;
+  color:#aaa;
+}
+
+/* ANIMATIONS */
+@keyframes fadeUp{
+  from{opacity:0; transform:translateY(20px);}
+  to{opacity:1; transform:translateY(0);}
+}
+
+/* MOBILE */
+@media(max-width:768px){
+  .hero{
+    flex-direction:column;
+    text-align:center;
+  }
+
+  .about{
+    flex-direction:column;
+  }
+}
+/* GRID 2x2 */
+.features-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:30px;
+  max-width:900px;
+  margin:auto;
+  margin-top:40px;
+}
+
+/* FEATURE CARD */
+.feature-card{
+  background:rgba(255,255,255,0.05);
+  padding:25px;
+  border-radius:16px;
+  backdrop-filter:blur(12px);
+  text-align:center;
+  transition:all 0.3s ease;
+  animation:fadeUp 0.8s ease;
+}
+
+/* ICON */
+.feature-card img{
+  width:70px;
+  margin-bottom:15px;
+  transition:0.3s;
+}
+
+/* HOVER ANIMATION */
+.feature-card:hover{
+  transform:translateY(-10px) scale(1.03);
+  box-shadow:0 10px 30px rgba(0,0,0,0.4);
+}
+
+.feature-card:hover img{
+  transform:scale(1.15) rotate(5deg);
+}
+
+/* TEXT */
+.feature-card h3{
+  margin-bottom:8px;
+}
+
+.feature-card p{
+  color:#ccc;
+  font-size:14px;
+}
+
+/* MOBILE */
+@media(max-width:700px){
+  .features-grid{
+    grid-template-columns:1fr;
+  }
+}
+/* VIDEO BACKGROUND */
+#bgVideo{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  z-index:-2;
+}
+
+/* DARK OVERLAY FOR READABILITY */
+body::after{
+  content:"";
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.65);
+  z-index:-1;
+}
+/* NAV */
+.nav{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px 30px;
+  position:relative;
+}
+
+/* LOGO */
+.logo{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.logo img{
+  width:36px;
+}
+
+/* LINKS */
+.nav-links{
+  display:flex;
+  gap:20px;
+}
+
+.nav-links a{
+  text-decoration:none;
+  color:white;
+  font-size:14px;
+}
+
+/* HAMBURGER */
+.hamburger{
+  display:none;
+  flex-direction:column;
+  cursor:pointer;
+  gap:5px;
+}
+
+.hamburger span{
+  width:25px;
+  height:3px;
+  background:white;
+  border-radius:5px;
+  transition:0.3s;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+
+  .hamburger{
+    display:flex;
+  }
+
+  .nav-links{
+    position:absolute;
+    top:70px;
+    right:20px;
+    background:rgba(0,0,0,0.9);
+    backdrop-filter:blur(10px);
+    flex-direction:column;
+    padding:20px;
+    border-radius:12px;
+    width:200px;
+
+    opacity:0;
+    transform:translateY(-10px);
+    pointer-events:none;
+    transition:0.3s;
+  }
+
+  .nav-links.active{
+    opacity:1;
+    transform:translateY(0);
+    pointer-events:auto;
+  }
+}
+.hamburger.active span:nth-child(1){
+  transform:rotate(45deg) translate(5px,5px);
+}
+
+.hamburger.active span:nth-child(2){
+  opacity:0;
+}
+
+.hamburger.active span:nth-child(3){
+  transform:rotate(-45deg) translate(6px,-6px);
+}
+
+</style>
+</head>
+
+<body>
+
+    <video autoplay muted loop playsinline id="bgVideo">
+  <source src="https://res.cloudinary.com/dccufw6lh/video/upload/v1777805210/270312_un4cnm.mp4" type="video/mp4">
+</video>
+
+<div class="glow"></div>
+
+<!-- NAV -->
+<div class="nav">
+
+  <div class="logo">
+    <strong>Smart Ration</strong>
+  </div>
+
+  <!-- Hamburger -->
+  <div class="hamburger" id="hamburger">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <!-- Menu -->
+  <div class="nav-links" id="navLinks">
+    <a href="#features">Features</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+    <a href="/login">Login</a>
+  </div>
+
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-text">
+    <h1>Smart Ration Distribution with Face Verification</h1>
+    <p>Secure, transparent and fraud-proof ration delivery powered by AI.</p>
+    <button class="cta" onclick="location.href='/login'">Get Started</button>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features" class="section">
+
+  <h2>Powerful Features</h2>
+
+  <div class="features-grid">
+
+    <!-- FEATURE 1 -->
+    <div class="feature-card">
+      <img src="https://thumbs.dreamstime.com/b/face-recognition-icon-line-simple-templates-web-design-infographics-element-symbol-254744470.jpg">
+      <h3>Face Authentication</h3>
+      <p>AI-based Face verification ensures secure and fraud-proof identity validation.</p>
+    </div>
+
+    <!-- FEATURE 2 -->
+    <div class="feature-card">
+      <img src="https://jisasoftech.com/wp-content/uploads/2021/09/Aadhaar-data-vault-icon.png">
+      <h3>Aadhaar Integration</h3>
+      <p>Link users with Aadhaar for seamless and accurate identification.</p>
+    </div>
+
+    <!-- FEATURE 3 -->
+    <div class="feature-card">
+      <img src="https://res.cloudinary.com/dccufw6lh/image/upload/v1777805474/illustration-of-shield-with-span-logo-suitable-for-sign-registered-verification-etc-free-vector-removebg-preview_atno9w.png">
+      <h3>Instant Verification</h3>
+      <p>Fast processing ensures real-time identity checks without delays.</p>
+    </div>
+
+    <!-- FEATURE 4 -->
+    <div class="feature-card">
+      <img src="https://res.cloudinary.com/dccufw6lh/image/upload/v1777805461/how_secure_is_cloud_storage-removebg-preview_okwqix.png">
+      <h3>Secure Data Storage</h3>
+      <p>Encrypted storage protects sensitive biometric and personal data.</p>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="section">
+  <div class="about">
+    <img src="https://res.cloudinary.com/dccufw6lh/image/upload/v1777805965/download__41_-removebg-preview_frj5wg.png">
+    <div class="about-text">
+      <h2>About Us</h2>
+      <p>
+        Smart Ration System is built to modernize public distribution systems using AI and biometric verification.
+        Our goal is to remove fraud, improve transparency, and ensure every citizen gets their rightful benefits.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="section contact">
+  <h2>Contact Us</h2>
+  <input type="text" placeholder="Your Name">
+  <input type="email" placeholder="Email">
+  <textarea rows="4" placeholder="Message"></textarea>
+  <button class="cta">Send Message</button>
+</section>
+
+<!-- FOOTER -->
+<div class="footer">
+  © 2026 Smart Ration System • Secure Distribution Platform
+</div>
+
+</body>
+<script>
+const cards = document.querySelectorAll(".feature-card");
+
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.style.opacity = 1;
+      entry.target.style.transform = "translateY(0)";
+    }
+  });
+});
+
+cards.forEach(card=>{
+  card.style.opacity = 0;
+  card.style.transform = "translateY(40px)";
+  observer.observe(card);
+});
+
+const hamburger = document.getElementById("hamburger");
+const navLinks = document.getElementById("navLinks");
+
+hamburger.onclick = () => {
+  hamburger.classList.toggle("active");
+  navLinks.classList.toggle("active");
+};
+
+
+</script>
+</html>
